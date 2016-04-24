@@ -71,6 +71,47 @@ struct node{
 	struct node *right;
 };
 
+void fixPrevPtr(struct node *root)
+{
+	static struct node *pre = NULL;
+
+	if (root != NULL)
+	{
+		fixPrevPtr(root->left);
+		root->left = pre;
+		pre = root;
+		fixPrevPtr(root->right);
+	}
+}
+struct node *fixNextPtr(struct node *root)
+{
+	struct node *prev = NULL;
+	while (root && root->right != NULL)
+		root = root->right;
+	while (root && root->left != NULL)
+	{
+		prev = root;
+		root = root->left;
+		root->right = prev;
+	}
+	return root;
+}
+struct node *Tree_to_DLL(struct node *root)
+{
+	fixPrevPtr(root);
+	return fixNextPtr(root);
+}
 int is_identical(struct node_dll *head, struct node *root){
-	return -1;
+	if (!head && !root)
+	   return -1;
+	if (!head || !root)
+		return 0;
+	while (head != NULL && root != NULL)
+	{
+		if (head->data != root->data)
+			return 0;
+		head = head->next;
+		root = root->right;
+	}
+	return (head == NULL&&root == NULL);
 }

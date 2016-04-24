@@ -37,5 +37,26 @@ struct node{
 };
 
 void merge_two_bst(struct node *root1, struct node *root2){
-	
+	if (root1 == NULL)
+	{
+		root1 = root2;
+		return;
+	}
+	if (root2 == NULL)
+		return;
+	if (root1->data < root2->data)
+	{
+		node* ptr = root2->left;
+		root2->left = NULL;
+		merge_two_bst(root1->right, root2);
+		merge_two_bst(root1, ptr);
+	}
+	else
+	{
+		node* ptr = root2->right;
+		root2->right = NULL;
+		merge_two_bst(root1->left, root2);
+		merge_two_bst(root1, ptr);
+	}
 }
+//head cur pos 
